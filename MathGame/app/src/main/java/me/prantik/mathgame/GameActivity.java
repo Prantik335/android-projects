@@ -31,8 +31,8 @@ public class GameActivity extends AppCompatActivity {
     int num1, num2, userAns, correctAns;
     int userScore = 0;
     int userLife = 3;
-
-    String type;
+    static final String[] SIGNS = {"+", "-", "x"};
+    String sign;
 
     CountDownTimer timer;
     private static long START_TIMER_IN_MILS;
@@ -46,10 +46,10 @@ public class GameActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         Intent thisIntent = getIntent();
-        type = thisIntent.getStringExtra("type");
+        sign = thisIntent.getStringExtra("sign");
 
         if (actionBar != null) {
-            actionBar.setTitle("Math Game - " + type);
+            actionBar.setTitle("Math Game - " + sign);
         }
 
         setTimeConst();
@@ -118,26 +118,15 @@ public class GameActivity extends AppCompatActivity {
         num1 = random.nextInt(100);
         num2 = random.nextInt(100);
 
-        String sign;
+        String _sign = sign;
 
-        switch (type) {
-            case "Addition":
-                correctAns = num1 + num2;
-                sign = "+";
-                break;
-            case "Subtraction":
-                correctAns = num1 - num2;
-                sign = "-";
-                break;
-            case "Multiplication":
-                correctAns = num1 * num2;
-                sign = "x";
-                break;
-            default:
-                sign = "";
-
+        if(sign.equals("Random")) {
+            _sign = SIGNS[random.nextInt(3)];
         }
-        question.setText(num1 + " " + sign + " " + num2);
+
+        correctAns = getCorrectAns(num1, num2, _sign);
+
+        question.setText(num1 + " " + _sign + " " + num2);
 
         status.setText("");
 
@@ -148,6 +137,16 @@ public class GameActivity extends AppCompatActivity {
         pauseTimer();
         resetTimer();
         startTimer();
+    }
+
+    public int getCorrectAns(int num1, int num2, String sign) {
+        if(sign.equals("+")) {
+            return num1 + num2;
+        } else if(sign.equals("-")) {
+            return num1 - num2;
+        } else {
+            return num1 * num2;
+        }
     }
 
     public void closeKeyboard() {
@@ -206,17 +205,18 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setTimeConst() {
-        switch (type) {
-            case "Addition":
+        switch (sign) {
+            case "+":
                 START_TIMER_IN_MILS = 10000;
                 break;
-            case "Subtraction":
-                START_TIMER_IN_MILS = 11000;
+            case "-":
+                START_TIMER_IN_MILS = 9000;
                 break;
-            case "Multiplication":
+            case "x":
                 START_TIMER_IN_MILS = 20000;
                 break;
             default:
+                START_TIMER_IN_MILS = 11000;
         }
     }
 

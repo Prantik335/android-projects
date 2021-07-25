@@ -115,7 +115,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:hint="Type your answer"
-        android:inputType="number"
+        android:inputType="numberSigned"
         android:textColor="@color/white" />
 
     <TextView
