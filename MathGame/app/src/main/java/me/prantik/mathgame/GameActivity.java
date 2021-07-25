@@ -6,12 +6,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
@@ -27,6 +29,11 @@ public class GameActivity extends AppCompatActivity {
     int num1, num2, userAns, correctAns;
     int userScore = 0;
     int userLife = 3;
+
+    CountDownTimer timer;
+    private static final long START_TIMER_IN_MILS = 10000;
+    Boolean timer_running;
+    long time_left_in_mils = START_TIMER_IN_MILS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,35 +55,39 @@ public class GameActivity extends AppCompatActivity {
 
         gameContinue();
 
-        ok.setOnClickListener(view -> {
-            userAns = Integer.parseInt(answer.getText().toString());
-
-            if (userAns == correctAns) {
-                userScore += 10;
-                score.setText("" + userScore);
-
-                status.setVisibility(View.VISIBLE);
-                status.setText(R.string.status_correct);
-                status.setTextColor(Color.GREEN);
-
-            } else {
-                status.setVisibility(View.VISIBLE);
-                status.setText(R.string.status_wrong);
-                status.setTextColor(Color.RED);
-
-                userLife--;
-                life.setText("" + userLife);
-            }
-
-            closeKeyboard();
-            answerTextView.setVisibility(View.VISIBLE);
-            answerTextView.setText("" + userAns);
-            answer.setVisibility(View.GONE);
-        });
+        ok.setOnClickListener(view -> onOkay());
 
         nextQuestion.setOnClickListener(view -> {
-
+            gameContinue();
         });
+    }
+
+    public void onOkay() {
+        userAns = Integer.parseInt(answer.getText().toString());
+
+        pauseTimer();
+
+        closeKeyboard();
+
+        if (userAns == correctAns) {
+            // update status to correct
+            status.setText(R.string.status_correct);
+            status.setTextColor(Color.GREEN);
+            // add 10 to score
+            userScore += 10;
+            score.setText("" + userScore);
+        } else {
+            // update status to wrong
+            status.setText(R.string.status_wrong);
+            status.setTextColor(Color.RED);
+            // decrease life
+            userLife--;
+            life.setText("" + userLife);
+        }
+
+        answer.setEnabled(false);
+        ok.setEnabled(false);
+
     }
 
     public void gameContinue() {
@@ -86,6 +97,15 @@ public class GameActivity extends AppCompatActivity {
         correctAns = num1 + num2;
 
         question.setText(num1 + " + " + num2);
+
+        status.setText("");
+
+        answer.setText("");
+        answer.setEnabled(true);
+        ok.setEnabled(true);
+
+        resetTimer();
+        startTimer();
     }
 
     public void closeKeyboard() {
@@ -95,4 +115,50 @@ public class GameActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public void startTimer() {
+        timer = new CountDownTimer(time_left_in_mils, 1000) {
+            @Override
+            public void onTick(long l) {
+                time_left_in_mils = l;
+                updateText();
+            }
+
+            @Override
+            public void onFinish() {
+                onTimeUp();
+            }
+        }.start();
+
+        timer_running = true;
+    }
+
+    public void onTimeUp() {
+        timer_running = false;
+        status.setText(R.string.status_time_up);
+        status.setTextColor(Color.RED);
+
+        userLife--;
+        life.setText("" + userLife);
+
+        answer.setEnabled(false);
+        ok.setEnabled(false);
+    }
+
+    private void updateText() {
+        int second = (int) (time_left_in_mils / 1000) % 60;
+        String time_left = String.format(Locale.getDefault(), "%02ds", second);
+        time.setText(time_left);
+    }
+
+    private void resetTimer() {
+        time_left_in_mils = START_TIMER_IN_MILS;
+        updateText();
+    }
+
+    private void pauseTimer() {
+        timer.cancel();
+        timer_running = false;
+    }
+
 }
