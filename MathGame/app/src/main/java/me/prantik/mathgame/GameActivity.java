@@ -1,9 +1,9 @@
 package me.prantik.mathgame;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -32,8 +32,10 @@ public class GameActivity extends AppCompatActivity {
     int userScore = 0;
     int userLife = 3;
 
+    String type;
+
     CountDownTimer timer;
-    private static final long START_TIMER_IN_MILS = 10000;
+    private static long START_TIMER_IN_MILS;
     Boolean timer_running;
     long time_left_in_mils = START_TIMER_IN_MILS;
 
@@ -41,6 +43,16 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        ActionBar actionBar = getSupportActionBar();
+        Intent thisIntent = getIntent();
+        type = thisIntent.getStringExtra("type");
+
+        if (actionBar != null) {
+            actionBar.setTitle("Math Game - " + type);
+        }
+
+        setTimeConst();
 
         score = findViewById(R.id.textViewScore);
         life = findViewById(R.id.textViewLife);
@@ -106,9 +118,26 @@ public class GameActivity extends AppCompatActivity {
         num1 = random.nextInt(100);
         num2 = random.nextInt(100);
 
-        correctAns = num1 + num2;
+        String sign;
 
-        question.setText(num1 + " + " + num2);
+        switch (type) {
+            case "Addition":
+                correctAns = num1 + num2;
+                sign = "+";
+                break;
+            case "Subtraction":
+                correctAns = num1 - num2;
+                sign = "-";
+                break;
+            case "Multiplication":
+                correctAns = num1 * num2;
+                sign = "x";
+                break;
+            default:
+                sign = "";
+
+        }
+        question.setText(num1 + " " + sign + " " + num2);
 
         status.setText("");
 
@@ -170,10 +199,25 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void pauseTimer() {
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
         }
         timer_running = false;
+    }
+
+    private void setTimeConst() {
+        switch (type) {
+            case "Addition":
+                START_TIMER_IN_MILS = 10000;
+                break;
+            case "Subtraction":
+                START_TIMER_IN_MILS = 11000;
+                break;
+            case "Multiplication":
+                START_TIMER_IN_MILS = 20000;
+                break;
+            default:
+        }
     }
 
 }
