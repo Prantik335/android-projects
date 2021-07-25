@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Math Game</string>
+    <string name="status_correct">Congratulation! Your answer is correct.</string>
+    <string name="status_wrong">Sorry! Your answer is wrong.</string>
 </resources>
