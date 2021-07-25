@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 import java.util.Random;
@@ -58,7 +60,17 @@ public class GameActivity extends AppCompatActivity {
         ok.setOnClickListener(view -> onOkay());
 
         nextQuestion.setOnClickListener(view -> {
-            gameContinue();
+            if (userLife < 1) {
+                pauseTimer();
+                Toast.makeText(getApplicationContext(), "Game Over!", Toast.LENGTH_LONG)
+                        .show();
+                Intent intent = new Intent(GameActivity.this, ResultActivity.class);
+                intent.putExtra("score", userScore);
+                startActivity(intent);
+                finish();
+            } else {
+                gameContinue();
+            }
         });
     }
 
@@ -104,6 +116,7 @@ public class GameActivity extends AppCompatActivity {
         answer.setEnabled(true);
         ok.setEnabled(true);
 
+        pauseTimer();
         resetTimer();
         startTimer();
     }
@@ -157,7 +170,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void pauseTimer() {
-        timer.cancel();
+        if(timer != null) {
+            timer.cancel();
+        }
         timer_running = false;
     }
 

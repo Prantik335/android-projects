@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         addition.setOnClickListener(view -> {
             Intent intent =  new Intent(MainActivity.this, GameActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 }
