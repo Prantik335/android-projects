@@ -67,9 +67,8 @@ public class MainActivity extends AppCompatActivity {
         String itemName = item.getText().toString();
 
         if (itemName.isEmpty()) {
-//            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
-        }
-        {
+            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
+        } else {
             Map<String, String> todo = new HashMap<>(2);
             SimpleDateFormat format = new SimpleDateFormat("h:mm a, d'''th' MMM yyy", Locale.getDefault());
             String currentDateAndTime = format.format(new Date());
