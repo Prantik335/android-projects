@@ -3,6 +3,7 @@ package me.prantik.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         textViewResult = findViewById(R.id.textViewResult);
         textViewHistory = findViewById(R.id.textViewHistory);
+
+        init();
 
         for (int i = 0; i < buttonIds.length; i++) {
             Button button = findViewById(buttonIds[i]);
@@ -170,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
     public void updateHistory(String status) {
         history = textViewHistory.getText().toString();
         currentResult = textViewResult.getText().toString();
+        history += currentResult + status;
 
-        textViewHistory.setText(history + currentResult + status);
+        textViewHistory.setText(history);
     }
 
     public double getResultValue() {
@@ -181,5 +185,27 @@ public class MainActivity extends AppCompatActivity {
     public void updateResultTextView() {
         DecimalFormat formatter = new DecimalFormat("######.######");
         textViewResult.setText(formatter.format(firstNum));
+    }
+
+    public void init() {
+        SharedPreferences sharedPreferences = new SharedPreferencesHelper(this).sharedPreferences;
+
+        number = sharedPreferences.getString("number", null);
+        status = sharedPreferences.getString("status", null);
+        history = sharedPreferences.getString("history", "");
+        currentResult = sharedPreferences.getString("result", "0");
+        firstNum = sharedPreferences.getFloat("firstNum", 0);
+        operator = sharedPreferences.getBoolean("operator", false);
+        equalClicked = sharedPreferences.getBoolean("equalClicked", false);
+
+        updateResultTextView();
+        textViewHistory.setText(history);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        new SharedPreferencesHelper(this).saveData(number, status, history, currentResult, firstNum, operator, equalClicked);
     }
 }
