@@ -26,9 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private String number = null, status = null;
 
+    private String history, currentResult;
+
     private double firstNum = 0, lastNum = 0;
 
-    private boolean operator = false;
+    private boolean operator = false, equalClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +50,43 @@ public class MainActivity extends AppCompatActivity {
                 button.setOnClickListener(view -> {
                     signClick(button.getText().toString());
                 });
+            } else if (buttonIds[i] == R.id.btnDot) {
+                button.setOnClickListener(view -> {
+                    number = textViewResult.getText().toString();
+                    if (!number.contains(".")) number += ".";
+                    textViewResult.setText(number);
+                });
             }
         }
 
         buttons.get(R.id.btnAC).setOnClickListener(view -> {
-
+            allClear();
         });
 
         buttons.get(R.id.btnDel).setOnClickListener(view -> {
-
+            if (number == null || number.isEmpty()) {
+                number = "0";
+            } else {
+                number = number.substring(0, number.length() - 1);
+            }
+            textViewResult.setText(number);
         });
 
         buttons.get(R.id.btnEqual).setOnClickListener(view -> {
-
+            signClick("");
+            operator = true;
+            equalClicked = true;
+            firstNum = getResultValue();
         });
 
     }
 
     public void numberClick(String num) {
-        if (number == null) {
+        if (equalClicked) {
+            allClear();
+            equalClicked = false;
+        }
+        if (number == null || number.equals("0")) {
             number = num;
         } else {
             number += num;
@@ -77,8 +97,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signClick(String _status) {
-        if (status == null) status = _status;
         if (operator) {
+            if(equalClicked) {
+                textViewHistory.setText(textViewResult.getText().toString() + _status);
+                textViewResult.setText("0");
+                equalClicked = false;
+            } else updateHistory(_status);
+
+            if (status == null) status = _status;
+
             switch (status) {
                 case "x":
                     multiply();
@@ -97,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
         status = _status;
         operator = false;
         number = null;
+    }
+
+    public void allClear() {
+        number = null;
+        status = null;
+        firstNum = 0;
+        lastNum = 0;
+        textViewHistory.setText("");
+        textViewResult.setText("0");
     }
 
     public void plus() {
@@ -131,12 +167,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void updateHistory(String status) {
+        history = textViewHistory.getText().toString();
+        currentResult = textViewResult.getText().toString();
+
+        textViewHistory.setText(history + currentResult + status);
+    }
+
     public double getResultValue() {
         return Double.parseDouble(textViewResult.getText().toString());
     }
 
     public void updateResultTextView() {
         DecimalFormat formatter = new DecimalFormat("######.######");
-        textViewResult.setText(formatter.format(firstNum + ""));
+        textViewResult.setText(formatter.format(firstNum));
     }
 }
