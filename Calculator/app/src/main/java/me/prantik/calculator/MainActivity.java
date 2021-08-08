@@ -2,10 +2,12 @@ package me.prantik.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     Map<Integer, Button> buttons = new HashMap<>();
 
-    private String number = null;
+    private String number = null, status = null;
 
     private double firstNum = 0, lastNum = 0;
+
+    private boolean operator = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
             if (i < 10) {
                 button.setOnClickListener(view -> numberClick(button.getText().toString()));
+            } else if (i >= 14) {
+                button.setOnClickListener(view -> {
+                    signClick(button.getText().toString());
+                });
             }
         }
-        
+
         buttons.get(R.id.btnAC).setOnClickListener(view -> {
 
         });
@@ -65,9 +73,70 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textViewResult.setText(number);
+        operator = true;
+    }
+
+    public void signClick(String _status) {
+        if (status == null) status = _status;
+        if (operator) {
+            switch (status) {
+                case "x":
+                    multiply();
+                    break;
+                case "/":
+                    divide();
+                    break;
+                case "-":
+                    minus();
+                    break;
+                default:
+                    plus();
+            }
+        }
+        updateResultTextView();
+        status = _status;
+        operator = false;
+        number = null;
     }
 
     public void plus() {
-        lastNum = Double.parseDouble(textViewResult.getText().toString());
+        lastNum = getResultValue();
+        firstNum += lastNum;
+    }
+
+    public void minus() {
+        if (firstNum == 0) {
+            firstNum = getResultValue();
+        } else {
+            lastNum = getResultValue();
+            firstNum -= lastNum;
+        }
+    }
+
+    public void multiply() {
+        if (firstNum == 0) {
+            firstNum = getResultValue();
+        } else {
+            lastNum = getResultValue();
+            firstNum *= lastNum;
+        }
+    }
+
+    public void divide() {
+        if (firstNum == 0) {
+            firstNum = getResultValue();
+        } else {
+            lastNum = getResultValue();
+            firstNum /= lastNum;
+        }
+    }
+
+    public double getResultValue() {
+        return Double.parseDouble(textViewResult.getText().toString());
+    }
+
+    public void updateResultTextView() {
+        DecimalFormat formatter = new DecimalFormat("######.######");
+        textViewResult.setText(formatter.format(firstNum + ""));
     }
 }
