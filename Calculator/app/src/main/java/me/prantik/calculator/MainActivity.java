@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String number = null;
 
+    private double firstNum = 0, lastNum = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,19 @@ public class MainActivity extends AppCompatActivity {
                 button.setOnClickListener(view -> numberClick(button.getText().toString()));
             }
         }
+        
+        buttons.get(R.id.btnAC).setOnClickListener(view -> {
+
+        });
+
+        buttons.get(R.id.btnDel).setOnClickListener(view -> {
+
+        });
+
+        buttons.get(R.id.btnEqual).setOnClickListener(view -> {
+
+        });
+
     }
 
     public void numberClick(String num) {
@@ -50,5 +65,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textViewResult.setText(number);
+    }
+
+    public void plus() {
+        lastNum = Double.parseDouble(textViewResult.getText().toString());
     }
 }
