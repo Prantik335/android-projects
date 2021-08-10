@@ -7,10 +7,10 @@
     tools:context=".SplashActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewSplash"
         android:layout_width="350dp"
         android:layout_height="350dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/splash" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewTitle"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -29,5 +29,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewSplash" />
 </androidx.constraintlayout.widget.ConstraintLayout>
