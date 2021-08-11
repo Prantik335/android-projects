@@ -57,12 +57,13 @@
             android:textStyle="bold" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/button"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonStart"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="#E91E63"
+        android:textColor="@color/white"
+        android:background="#E91E63"
         android:text="Start"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
