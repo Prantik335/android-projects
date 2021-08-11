@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 if (i + 1 == radioButtons.length && !radioButton.isChecked()) {
                     Snackbar.make(view, "You selected none!", Snackbar.LENGTH_SHORT).show();
                 } else if (radioButton.isChecked()) {
-                    intent.putExtra("digit", i + 1);
+                    intent.putExtra("digit", i + 2);
                     startActivity(intent);
                     break;
                 }
