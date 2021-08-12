@@ -14,7 +14,6 @@ public class BMICalculatorActivity extends AppCompatActivity {
 
     private EditText editTextWeight, editTextHeight;
     private Button buttonBMI;
-    private FrameLayout frame;
 
     // Fragments
     private FragmentManager fragmentManager;
@@ -31,9 +30,6 @@ public class BMICalculatorActivity extends AppCompatActivity {
 
         // Initializing Button
         buttonBMI = findViewById(R.id.buttonBMI);
-
-        // Initializing FrameLayout
-        frame = findViewById(R.id.frame);
 
         // Initializing Fragment
         fragmentManager = getSupportFragmentManager();
