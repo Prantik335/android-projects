@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-class ResultFragment extends Fragment {
+public class ResultFragment extends Fragment {
     TextView result;
 
     @Nullable
@@ -32,7 +32,7 @@ class ResultFragment extends Fragment {
         // bmi = weight (gram) / height ^ 2
         double bmi = (weight * 1000) / Math.pow(height, 2);
         // setting bmi to result TextView
-        result.setText(String.valueOf(bmi));
+        result.setText("Your BMI: " + bmi);
 
         return view;
     }

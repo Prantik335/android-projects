@@ -8,12 +8,17 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 public class BMICalculatorActivity extends AppCompatActivity {
 
     private EditText editTextWeight, editTextHeight;
     private Button buttonBMI;
     private FrameLayout frame;
+
+    // Fragments
+    private FragmentManager fragmentManager;
+    ResultFragment resultFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +36,37 @@ public class BMICalculatorActivity extends AppCompatActivity {
         frame = findViewById(R.id.frame);
 
         // Initializing Fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ResultFragment resultFragment = new ResultFragment();
+        fragmentManager = getSupportFragmentManager();
+        resultFragment = new ResultFragment();
 
         // On Click listener
         buttonBMI.setOnClickListener(view -> {
-            // Getting user weight and weight and put them on bundle
-            Bundle bundle = new Bundle();
+            // Taking user weight and weight
+            String weight = editTextWeight.getText().toString();
+            String height = editTextHeight.getText().toString();
 
-            double weight = Double.parseDouble(editTextWeight.getText().toString());
-            double height = Double.parseDouble(editTextHeight.getText().toString());
+            if (!weight.isEmpty() && !height.isEmpty()) {
+                calculateBMI(Double.parseDouble(weight), Double.parseDouble(height));
+            } else {
+                Toast.makeText(BMICalculatorActivity.this, "Enter your weight & height.", Toast.LENGTH_SHORT)
+                        .show();
+            }
 
-            bundle.putDouble("weight", weight);
-            bundle.putDouble("height", height);
-
-            // setting arguments to resultFragment then adding to fragmentTransaction
-            resultFragment.setArguments(bundle);
-            fragmentTransaction.add(R.id.frame, resultFragment);
-            fragmentTransaction.commit();
         });
+    }
+
+    private void calculateBMI(double weight, double height) {
+        // putting arguments to result Fragment
+        Bundle bundle = new Bundle();
+
+        bundle.putDouble("weight", weight);
+        bundle.putDouble("height", height);
+
+        resultFragment.setArguments(bundle);
+
+        // adding resultFragment to fragmentTransaction
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frame, resultFragment);
+        fragmentTransaction.commit();
     }
 }
