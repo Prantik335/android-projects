@@ -23,6 +23,17 @@
         android:layout_marginTop="10dp"
         android:textSize="20sp" />
 
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:checked="false"
+        android:text="Secure"
+        android:textOff="Secure"
+        android:textOn="Normal" />
+
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
@@ -31,4 +42,5 @@
         android:background="@android:color/holo_blue_light">
 
     </FrameLayout>
+
 </LinearLayout>
