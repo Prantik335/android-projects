@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Fragment Goal</string>
+
+    <string-array name="cites">
+        <item>Berlin</item>
+        <item>Athens</item>
+        <item>Rome</item>
+        <item>Tokyo</item>
+        <item>Amsterdam</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
